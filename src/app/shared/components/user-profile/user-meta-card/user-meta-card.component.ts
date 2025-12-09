@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { InputFieldComponent } from './../../form/input/input-field.component';
 import { ModalService } from '../../../services/modal.service';
 import { CommonModule } from '@angular/common';
@@ -18,13 +18,13 @@ import { ProfileInfo } from '../../../models/user-profile/user-profile.model';
   templateUrl: './user-meta-card.component.html',
   styles: ``
 })
-export class UserMetaCardComponent implements OnInit {
+export class UserMetaCardComponent {
+  @Input() profile: ProfileInfo | null = null;
+  
   private profileService = inject(ProfileService);
   public modal = inject(ModalService);
 
   isOpen = false;
-  isLoading = false;
-  profile: ProfileInfo | null = null;
 
   localeOptions = [
     { value: 'en_US', label: 'English (United States)' },
@@ -38,23 +38,7 @@ export class UserMetaCardComponent implements OnInit {
     { value: 'zh_CN', label: 'Chinese (China)' },
   ];
 
-  ngOnInit() {
-    this.loadProfile();
-  }
 
-  loadProfile() {
-    this.isLoading = true;
-    this.profileService.getMyProfile().subscribe({
-      next: (response) => {
-        this.profile = response.data;
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading profile:', error);
-        this.isLoading = false;
-      }
-    });
-  }
 
   openModal() { this.isOpen = true; }
   closeModal() { this.isOpen = false; }

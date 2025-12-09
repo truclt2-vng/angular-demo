@@ -1,9 +1,5 @@
 <div class="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-  <div *ngIf="isLoading" class="flex justify-center py-8">
-    <div class="text-gray-500 dark:text-gray-400">Loading settings...</div>
-  </div>
-
-  <div *ngIf="!isLoading" class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+  <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
     <div>
       <h4 class="text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-6">
         User Settings
@@ -214,20 +210,28 @@
             <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
               <div>
                 <app-label>Decimal Separator</app-label>
-                <app-input-field 
-                  type="text" 
-                  [(value)]="decimalSeparator"
-                  placeholder="e.g., . or ,"
-                />
+                <select 
+                  [(ngModel)]="decimalSeparator"
+                  name="decimalSeparator"
+                  class="w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+                >
+                  <option [ngValue]="null">Select separator</option>
+                  <option value=".">. (dot)</option>
+                  <option value=",">, (comma)</option>
+                </select>
               </div>
 
               <div>
                 <app-label>Thousand Separator</app-label>
-                <app-input-field 
-                  type="text" 
-                  [(value)]="thousandSeparator"
-                  placeholder="e.g., , or ."
-                />
+                <select 
+                  [(ngModel)]="thousandSeparator"
+                  name="thousandSeparator"
+                  class="w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+                >
+                  <option [ngValue]="null">Select separator</option>
+                  <option value=",">, (comma)</option>
+                  <option value=".">. (dot)</option>
+                </select>
               </div>
             </div>
           </div>

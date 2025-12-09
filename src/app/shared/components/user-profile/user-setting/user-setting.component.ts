@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProfileService } from '../../../services/profile.service';
@@ -23,14 +23,14 @@ import { ModalComponent } from '../../ui/modal/modal.component';
   templateUrl: './user-setting.component.html',
   styles: ``
 })
-export class UserSettingComponent implements OnInit {
+export class UserSettingComponent implements OnInit, OnChanges {
+  @Input() profile: ProfileInfo | null = null;
+  
   private profileService = inject(ProfileService);
-  public modal = inject(ModalService);
+  private modalService = inject(ModalService);
 
   isOpen = false;
-  isLoading = false;
   isSaving = false;
-  profile: ProfileInfo | null = null;
 
   // Form data
   timezone = '';
@@ -83,7 +83,13 @@ export class UserSettingComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.loadProfile();
+    this.loadSettingsFromProfile();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['profile'] && this.profile) {
+      this.loadSettingsFromProfile();
+    }
   }
 
   openModal() { 
@@ -92,25 +98,10 @@ export class UserSettingComponent implements OnInit {
   
   closeModal() { 
     this.isOpen = false;
-    this.populateFormData(); // Reset form data when closing
+    this.loadSettingsFromProfile(); // Reset form data when closing
   }
 
-  loadProfile() {
-    this.isLoading = true;
-    this.profileService.getMyProfile().subscribe({
-      next: (response) => {
-        this.profile = response.data;
-        this.populateFormData();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading profile:', error);
-        this.isLoading = false;
-      }
-    });
-  }
-
-  populateFormData() {
+  loadSettingsFromProfile() {
     if (this.profile) {
       this.timezone = this.profile.timezone || '';
       this.language = this.profile.language || '';
@@ -156,7 +147,7 @@ export class UserSettingComponent implements OnInit {
   }
 
   handleReset() {
-    this.populateFormData();
+    this.loadSettingsFromProfile();
   }
 
   getLanguageLabel(): string {
