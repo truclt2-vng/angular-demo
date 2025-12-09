@@ -1,7 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProfileService, ProfileInfo } from '../../../services/profile.service';
+import { ProfileService } from '../../../services/profile.service';
+import { ProfileInfo } from '../../../models/user-profile/user-profile.model';
 import { ModalService } from '../../../services/modal.service';
 import { LabelComponent } from '../../form/label/label.component';
 import { InputFieldComponent } from '../../form/input/input-field.component';
@@ -127,6 +128,7 @@ export class UserSettingComponent implements OnInit {
     
     // Convert empty strings to null
     const settings = {
+      id: this.profile?.id,
       timezone: this.timezone,
       language: this.language,
       locale: this.locale,

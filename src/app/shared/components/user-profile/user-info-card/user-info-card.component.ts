@@ -5,7 +5,8 @@ import { InputFieldComponent } from '../../form/input/input-field.component';
 import { ButtonComponent } from '../../ui/button/button.component';
 import { LabelComponent } from '../../form/label/label.component';
 import { ModalComponent } from '../../ui/modal/modal.component';
-import { ProfileService, ProfileInfo } from '../../../services/profile.service';
+import { ProfileService } from '../../../services/profile.service';
+import { ProfileInfo } from '../../../models/user-profile/user-profile.model';
 
 @Component({
   selector: 'app-user-info-card',

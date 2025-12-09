@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { DropdownItemTwoComponent } from '../../ui/dropdown/dropdown-item/dropdown-item.component-two';
 import { AuthService } from '../../../services/auth.service';
-import { ProfileService, ProfileInfo } from '../../../services/profile.service';
+import { ProfileService } from '../../../services/profile.service';
+import { ProfileInfo } from '../../../models/user-profile/user-profile.model';
 
 @Component({
   selector: 'app-user-dropdown',
@@ -44,7 +45,7 @@ export class UserDropdownComponent implements OnInit {
     this.profileService.clearProfile();
     this.closeDropdown();
     // Redirect to home or login page after logout
-    this.router.navigate(['']);
+    this.router.navigate(['/signin']);
   }
 
   getAvatarUrl(): string {

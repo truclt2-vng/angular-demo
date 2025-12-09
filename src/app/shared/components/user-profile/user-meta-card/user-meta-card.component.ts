@@ -4,7 +4,8 @@ import { ModalService } from '../../../services/modal.service';
 import { CommonModule } from '@angular/common';
 import { ModalComponent } from '../../ui/modal/modal.component';
 import { ButtonComponent } from '../../ui/button/button.component';
-import { ProfileService, ProfileInfo } from '../../../services/profile.service';
+import { ProfileService } from '../../../services/profile.service';
+import { ProfileInfo } from '../../../models/user-profile/user-profile.model';
 
 @Component({
   selector: 'app-user-meta-card',

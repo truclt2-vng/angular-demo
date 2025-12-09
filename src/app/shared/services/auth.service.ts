@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { APP_CONFIG } from '../constants/app.constant';
 
 export interface LoginRequest {
   username: string;
@@ -16,13 +18,13 @@ export interface LoginResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'https://hcm-api-dev.a4b.vn/api';
+  private readonly API_URL = APP_CONFIG.API_BASE_URL;
   private readonly TOKEN_KEY = 'id_token';
   
   private tokenSubject = new BehaviorSubject<string | null>(this.getToken());
   public token$ = this.tokenSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(credentials: LoginRequest): Observable<LoginResponse> {
     const headers = new HttpHeaders({
@@ -122,5 +124,6 @@ export class AuthService {
   logout(): void {
     console.log('Logout successful');
     this.removeToken();
+    this.router.navigate(['/signin']);
   }
 }
