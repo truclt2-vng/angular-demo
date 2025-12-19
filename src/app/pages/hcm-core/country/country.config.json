@@ -1,0 +1,112 @@
+{
+  "pageTitle": "Country Management",
+  "searchPlaceholder": "Search countries...",
+  "addButtonLabel": "Add Country",
+  "allowDelete": true,
+  "allowMultiSelect": true,
+  "pageSize": 20,
+  "defaultSortDirection": "asc",
+  "defaultFilters": {
+    "recordStatus": "O",
+    "authStatus": "A"
+  },
+  "tableFields": [
+    {
+      "field": "codeAlpha2",
+      "label": "Code",
+      "sortable": true,
+      "width": "auto",
+      "badge": true
+    },
+    {
+      "field": "nativeName",
+      "label": "Name",
+      "sortable": true,
+      "width": "auto"
+    },
+    {
+      "field": "updateDate",
+      "label": "Last updated",
+      "sortable": false,
+      "width": "auto",
+      "dateFormat": "dd/MM/yyyy HH:mm"
+    },
+    {
+      "field": "recordStatus",
+      "label": "Status",
+      "sortable": false,
+      "width": "auto",
+      "badge": true
+    },
+    {
+      "field": "authStatus",
+      "label": "Authorize",
+      "sortable": false,
+      "width": "auto",
+      "badge": true
+    }
+  ],
+  "actions": [
+    {
+      "type": "VIEW",
+      "label": "View",
+      "colorClass": "text-blue-600 hover:text-blue-700"
+    },
+    {
+      "type": "EDIT",
+      "label": "Edit",
+      "colorClass": "text-yellow-600 hover:text-yellow-700"
+    },
+    {
+      "type": "DELETE",
+      "label": "Delete",
+      "colorClass": "text-red-600 hover:text-red-700",
+      "disableForApproved": true,
+      "disabledMessage": "Cannot delete approved records"
+    }
+  ],
+  "advanceFilters": [],
+  "modal": {
+    "createDefaults": {
+      "name": { "en": "", "vi": "" },
+      "nativeName": "",
+      "codeAlpha2": "",
+      "codeAlpha3": "",
+      "description": "",
+      "recordStatus": "O"
+    },
+    "editFields": ["id", "aggId", "name", "nativeName", "codeAlpha2", "codeAlpha3", "description", "recordStatus"]
+  },
+  "deleteModal": {
+    "title": "Delete Country",
+    "subtitle": "This action cannot be undone",
+    "warningMessage": "Are you sure you want to delete",
+    "fields": [
+      {
+        "label": "Country Name",
+        "key": "nativeName",
+        "type": "text"
+      }
+    ]
+  },
+  "validation": {
+    "requiredFields": ["name.en", "name.vi", "nativeName", "codeAlpha2"]
+  },
+  "messages": {
+    "error": {
+      "create": "Error creating country",
+      "update": "Error updating country",
+      "delete": "Error deleting country",
+      "load": "Error loading countries",
+      "loadCount": "Error loading count",
+      "validation": "Please fill in all required fields",
+      "missingId": "Country ID is required for update",
+      "deleteApproved": "Attempted to delete approved record"
+    }
+  },
+  "api": {
+    "searchField": "ftsValue",
+    "filterType": "text",
+    "filterOperator": "equals"
+  }
+}

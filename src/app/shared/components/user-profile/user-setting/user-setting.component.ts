@@ -114,6 +114,11 @@ export class UserSettingComponent implements OnInit, OnChanges {
     }
   }
 
+  onLanguageChange(newLanguage: string) {
+    console.log('Language changed to:', newLanguage);
+    // Add your logic here
+  }
+
   handleSave() {
     this.isSaving = true;
     

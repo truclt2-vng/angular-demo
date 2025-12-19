@@ -1,0 +1,156 @@
+<!-- Search and Filter -->
+<div class="mb-6 flex items-center gap-3">
+  <div *ngIf="showSearch" class="relative flex-1">
+    <button class="absolute -translate-y-1/2 left-4 top-1/2" type="button">
+      <svg class="fill-gray-500 dark:fill-gray-400" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.04199 9.37381C3.04199 5.87712 5.87735 3.04218 9.37533 3.04218C12.8733 3.04218 15.7087 5.87712 15.7087 9.37381C15.7087 12.8705 12.8733 15.7055 9.37533 15.7055C5.87735 15.7055 3.04199 12.8705 3.04199 9.37381ZM9.37533 1.54218C5.04926 1.54218 1.54199 5.04835 1.54199 9.37381C1.54199 13.6993 5.04926 17.2055 9.37533 17.2055C11.2676 17.2055 13.0032 16.5346 14.3572 15.4178L17.1773 18.2381C17.4702 18.531 17.945 18.5311 18.2379 18.2382C18.5308 17.9453 18.5309 17.4704 18.238 17.1775L15.4182 14.3575C16.5367 13.0035 17.2087 11.2671 17.2087 9.37381C17.2087 5.04835 13.7014 1.54218 9.37533 1.54218Z" fill=""></path></svg>
+    </button>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      name="searchTerm"
+      (keyup.enter)="onSearch()"
+      [placeholder]="searchPlaceholder"
+      class="h-[42px] w-full rounded-lg border border-gray-300 bg-transparent py-2.5 pl-[42px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+    />
+  </div>
+  
+  <button 
+    *ngIf="showRefresh"
+    type="button"
+    (click)="onRefresh()"
+    class="inline-flex h-[42px] items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+    title="Refresh"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+    </svg>
+  </button>
+  
+  <!-- <button 
+    *ngIf="showFilter && filterConfigs.length > 0"
+    type="button"
+    (click)="openFilterModal()"
+    class="inline-flex h-[42px] items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200"
+  >
+    <svg class="stroke-current fill-white dark:fill-gray-800" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.29004 5.90393H17.7067" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.7075 14.0961H2.29085" stroke="" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z" fill="" stroke="" stroke-width="1.5"></path><path d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z" fill="" stroke="" stroke-width="1.5"></path></svg>
+    Filter
+  </button> -->
+</div>
+
+<!-- Table -->
+<div class="overflow-hidden bg-white border border-gray-200 rounded-lg dark:bg-gray-900 dark:border-gray-800">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+        <tr>
+          <th *ngIf="allowMultiSelect" scope="col" class="px-6 py-3 w-12">
+            <input
+              type="checkbox"
+              [checked]="isAllSelected()"
+              (change)="toggleSelectAll()"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+            />
+          </th>
+          <th 
+            *ngFor="let config of fieldConfigs" 
+            scope="col" 
+            class="px-6 py-3"
+          >
+            <div class="flex items-center gap-2">
+              <div 
+                [class.cursor-pointer]="config.sortable"
+                [class.hover:text-gray-900]="config.sortable"
+                [class.dark:hover:text-white]="config.sortable"
+                (click)="config.sortable ? onSort(config.field) : null"
+                class="flex items-center gap-2"
+              >
+                {{ config.label }}
+                <svg *ngIf="config.sortable && sortField === config.field" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path *ngIf="sortDirection === 'asc'" d="M5 10l5-5 5 5H5z" />
+                  <path *ngIf="sortDirection === 'desc'" d="M5 10l5 5 5-5H5z" />
+                </svg>
+              </div>
+            </div>
+          </th>
+          <th *ngIf="actions.length > 0" scope="col" class="px-6 py-3 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!isLoading && data.length === 0">
+          <td [attr.colspan]="(allowMultiSelect ? 1 : 0) + fieldConfigs.length + (actions.length > 0 ? 1 : 0)" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+            No data found
+          </td>
+        </tr>
+        <tr 
+          *ngFor="let item of data"
+          [ngClass]="{
+            'bg-white border-b dark:bg-gray-900 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800': true,
+            'bg-blue-50 dark:bg-blue-900/20': allowMultiSelect && isSelected(item)
+          }"
+        >
+          <td *ngIf="allowMultiSelect" class="px-6 py-4">
+            <input
+              type="checkbox"
+              [checked]="isSelected(item)"
+              (change)="toggleSelection(item)"
+              class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+            />
+          </td>
+          <td 
+            *ngFor="let config of fieldConfigs" 
+            class="px-6 py-4"
+            [class.font-medium]="config.field === 'id'"
+            [class.text-gray-900]="config.field === 'id'"
+            [class.dark:text-white]="config.field === 'id'"
+          >
+            <!-- Badge rendering -->
+            <span *ngIf="config.badge" [class]="getBadgeClass(config, item)">
+              {{ getBadgeValue(config, item) }}
+            </span>
+            
+            <!-- Regular text for other fields -->
+            <ng-container *ngIf="!config.badge">
+              {{ getFormattedFieldValue(item, config) }}
+            </ng-container>
+          </td>
+          <td *ngIf="actions.length > 0" class="px-6 py-4 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <app-action-button
+                *ngFor="let action of actions; trackBy: trackByActionLabel"
+                [hidden]="!isActionVisible(action, item)"
+                [icon]="action.icon"
+                [label]="action.label"
+                [colorClass]="action.colorClass"
+                [disabled]="isActionDisabled(action, item)"
+                [title]="getActionTitle(action, item)"
+                (actionClick)="action.onClick(item)"
+              ></app-action-button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    [pageSize]="pageSize"
+    [totalCount]="totalCount"
+    (pageChange)="onPageChange($event)"
+    (refresh)="onRefresh()"
+  ></app-pagination>
+</div>
+
+<!-- Filter Modal -->
+<app-filter-modal
+  *ngIf="filterConfigs.length > 0"
+  [isOpen]="showFilterModal"
+  [title]="'Filter Data'"
+  [filters]="filterConfigs"
+  [filterValues]="filterValues"
+  (close)="closeFilterModal()"
+  (apply)="applyFilters($event)"
+  (reset)="resetFilters()"
+></app-filter-modal>

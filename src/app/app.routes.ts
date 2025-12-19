@@ -18,7 +18,10 @@ import { VideosComponent } from './pages/ui-elements/videos/videos.component';
 import { SignInComponent } from './pages/auth-pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/auth-pages/sign-up/sign-up.component';
 import { CalenderComponent } from './pages/calender/calender.component';
+import { ReactiveFormExampleComponent } from './pages/reactive-form-example/reactive-form-example.component';
+import { CountryComponent } from './pages/hcm-core/country/country.component';
 import { authGuard } from './shared/guards/auth.guard';
+import { DocumentTypeComponent } from './pages/hcm-core/documenttype/documenttype.component';
 
 export const routes: Routes = [
   {
@@ -31,78 +34,92 @@ export const routes: Routes = [
         component: EcommerceComponent,
         pathMatch: 'full',
         title:
-          'Angular Ecommerce Dashboard | TailAdmin - Angular Admin Dashboard Template',
+          'Angular Ecommerce Dashboard | HCM-ADMIN - Angular Admin Dashboard Template',
       },
       {
         path:'calendar',
         component:CalenderComponent,
-        title:'Angular Calender | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Calender | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'profile',
         component:ProfileComponent,
-        title:'Angular Profile Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Profile Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'form-elements',
         component:FormElementsComponent,
-        title:'Angular Form Elements Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Form Elements Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
+      },
+      {
+        path:'reactive-forms',
+        component:ReactiveFormExampleComponent,
+        title:'Angular Reactive Forms | HCM-ADMIN - Angular Admin Dashboard Template'
+      },
+      {
+        path:'countries',
+        component:CountryComponent,
+        title:'Country Management | HCM-ADMIN - Angular Admin Dashboard Template'
+      },{
+        path:'documenttypes',
+        component:DocumentTypeComponent,
+        title:'DocumentType Management | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'basic-tables',
         component:BasicTablesComponent,
-        title:'Angular Basic Tables Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Basic Tables Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'blank',
         component:BlankComponent,
-        title:'Angular Blank Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Blank Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       // support tickets
       {
         path:'invoice',
         component:InvoicesComponent,
-        title:'Angular Invoice Details Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Invoice Details Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'line-chart',
         component:LineChartComponent,
-        title:'Angular Line Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Line Chart Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'bar-chart',
         component:BarChartComponent,
-        title:'Angular Bar Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Bar Chart Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'alerts',
         component:AlertsComponent,
-        title:'Angular Alerts Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Alerts Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'avatars',
         component:AvatarElementComponent,
-        title:'Angular Avatars Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Avatars Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'badge',
         component:BadgesComponent,
-        title:'Angular Badges Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Badges Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'buttons',
         component:ButtonsComponent,
-        title:'Angular Buttons Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Buttons Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'images',
         component:ImagesComponent,
-        title:'Angular Images Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Images Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
       {
         path:'videos',
         component:VideosComponent,
-        title:'Angular Videos Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Videos Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
       },
     ]
   },
@@ -111,17 +128,17 @@ export const routes: Routes = [
     // path:'signin',
     path:'signin',
     component:SignInComponent,
-    title:'Angular Sign In Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular Sign In Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
   },
   {
     path:'signup',
     component:SignUpComponent,
-    title:'Angular Sign Up Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular Sign Up Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
   },
   // error pages
   {
     path:'**',
     component:NotFoundComponent,
-    title:'Angular NotFound Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular NotFound Dashboard | HCM-ADMIN - Angular Admin Dashboard Template'
   },
 ];

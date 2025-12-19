@@ -1,0 +1,268 @@
+<app-modal
+  [isOpen]="modalState.isOpen"
+  (close)="onClose()"
+  className="max-w-[800px] m-4 z-[9999]"
+>
+  <div class="relative w-full max-w-[800px] rounded-2xl bg-white p-4 shadow-sm dark:bg-gray-900 lg:p-6">
+    <!-- Header -->
+    <div class="mb-4 pr-16 lg:pr-20">
+      <div class="flex flex-wrap items-center gap-2">
+        <h4 class="text-base font-semibold text-gray-900 dark:text-white">
+          <ng-container [ngSwitch]="modalState.mode">
+            <ng-container *ngSwitchCase="'create'">Add Country</ng-container>
+            <ng-container *ngSwitchCase="'edit'">Update Country</ng-container>
+            <ng-container *ngSwitchCase="'view'">Country Details</ng-container>
+          </ng-container>
+        </h4>
+
+        <!-- recordStatus next to title -->
+        <span
+          *ngIf="modalState.mode === 'view' && modalState.data"
+          class="inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-medium"
+          [ngClass]="{
+            'bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300': modalState.data.recordStatus === 'O',
+            'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300': modalState.data.recordStatus !== 'O'
+          }"
+        >
+          <span
+            class="h-2 w-2 rounded-full"
+            [ngClass]="{
+              'bg-green-500': modalState.data.recordStatus === 'O',
+              'bg-gray-500': modalState.data.recordStatus !== 'O'
+            }"
+          ></span>
+          {{ modalState.data.recordStatus === 'O' ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+
+      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <ng-container [ngSwitch]="modalState.mode">
+          <ng-container *ngSwitchCase="'create'">Create a new country record.</ng-container>
+          <ng-container *ngSwitchCase="'edit'">Edit country information.</ng-container>
+          <ng-container *ngSwitchCase="'view'">View country information.</ng-container>
+        </ng-container>
+      </p>
+    </div>
+
+
+
+    <!-- Divider -->
+    <div class="mb-4 h-px w-full bg-gray-200 dark:bg-gray-800"></div>
+
+    <!-- View Mode -->
+    <div *ngIf="modalState.mode === 'view' && modalState.data" class="custom-scrollbar max-h-[520px] overflow-y-auto pr-1">
+      <!-- General -->
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div>
+          <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Country Name (EN)</app-label>
+          <p class="text-sm font-medium text-gray-900 dark:text-white">{{ modalState.data.name?.en || 'N/A' }}</p>
+        </div>
+
+        <div>
+          <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Country Name (VI)</app-label>
+          <p class="text-sm font-medium text-gray-900 dark:text-white">{{ modalState.data.name?.vi || 'N/A' }}</p>
+        </div>
+
+        <div>
+          <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Native Name</app-label>
+          <p class="text-sm font-medium text-gray-900 dark:text-white">{{ modalState.data.nativeName || 'N/A' }}</p>
+        </div>
+
+        <div class="flex items-end gap-2">
+          <div class="flex-1">
+            <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Code Alpha2</app-label>
+            <span class="inline-flex rounded-md bg-blue-50 px-2 py-1 text-xs font-semibold text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+              {{ modalState.data.codeAlpha2 || 'N/A' }}
+            </span>
+          </div>
+
+          <div class="flex-1">
+            <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Code Alpha3</app-label>
+            <span class="inline-flex rounded-md bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-800 dark:bg-gray-800 dark:text-gray-200">
+              {{ modalState.data.codeAlpha3 || 'N/A' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="lg:col-span-2">
+          <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Description</app-label>
+          <p class="text-sm text-gray-800 dark:text-gray-200">
+            {{ modalState.data.description || 'No description' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Date info -->
+      <div class="mt-5 rounded-xl border border-gray-200 p-4 dark:border-gray-800">
+        <h5 class="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Date Information</h5>
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <div>
+            <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Created Date</app-label>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ modalState.data.createDate | date:'medium' }}</p>
+          </div>
+          <div>
+            <app-label className="mb-1 text-xs text-gray-500 dark:text-gray-400">Last Updated</app-label>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ modalState.data.updateDate ? (modalState.data.updateDate | date:'medium') : 'Never' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create/Edit Form -->
+    <form *ngIf="modalState.mode !== 'view'" class="flex flex-col" (ngSubmit)="onSubmit()" #countryForm="ngForm">
+      <div class="custom-scrollbar max-h-[520px] overflow-y-auto pr-1">
+        <div *ngIf="modalState.data" class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <!-- Name EN -->
+          <div>
+            <app-label>Country Name (EN) *</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.name!.en"
+              name="nameEn"
+              #nameEn="ngModel"
+              required
+              minlength="2"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              [class.border-red-500]="nameEn.invalid && (nameEn.dirty || nameEn.touched)"
+            />
+            <p *ngIf="nameEn.invalid && (nameEn.dirty || nameEn.touched)" class="mt-1 text-xs text-red-600 dark:text-red-400">
+              <span *ngIf="nameEn.errors?.['required']">Required</span>
+              <span *ngIf="nameEn.errors?.['minlength']">Min 2 characters</span>
+            </p>
+          </div>
+
+          <!-- Name VI -->
+          <div>
+            <app-label>Country Name (VI) *</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.name!.vi"
+              name="nameVi"
+              #nameVi="ngModel"
+              required
+              minlength="2"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              [class.border-red-500]="nameVi.invalid && (nameVi.dirty || nameVi.touched)"
+            />
+            <p *ngIf="nameVi.invalid && (nameVi.dirty || nameVi.touched)" class="mt-1 text-xs text-red-600 dark:text-red-400">
+              <span *ngIf="nameVi.errors?.['required']">Required</span>
+              <span *ngIf="nameVi.errors?.['minlength']">Min 2 characters</span>
+            </p>
+          </div>
+
+          <!-- Native -->
+          <div>
+            <app-label>Native Name *</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.nativeName"
+              name="nativeName"
+              #nativeName="ngModel"
+              required
+              minlength="2"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              [class.border-red-500]="nativeName.invalid && (nativeName.dirty || nativeName.touched)"
+            />
+            <p *ngIf="nativeName.invalid && (nativeName.dirty || nativeName.touched)" class="mt-1 text-xs text-red-600 dark:text-red-400">
+              <span *ngIf="nativeName.errors?.['required']">Required</span>
+              <span *ngIf="nativeName.errors?.['minlength']">Min 2 characters</span>
+            </p>
+          </div>
+
+          <!-- Alpha2 -->
+          <div>
+            <app-label>Code Alpha2 *</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.codeAlpha2"
+              name="codeAlpha2"
+              #codeAlpha2="ngModel"
+              maxlength="2"
+              minlength="2"
+              required
+              pattern="[A-Z]{2}"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              [class.border-red-500]="codeAlpha2.invalid && (codeAlpha2.dirty || codeAlpha2.touched)"
+            />
+            <p *ngIf="codeAlpha2.invalid && (codeAlpha2.dirty || codeAlpha2.touched)" class="mt-1 text-xs text-red-600 dark:text-red-400">
+              <span *ngIf="codeAlpha2.errors?.['required']">Required</span>
+              <span *ngIf="codeAlpha2.errors?.['minlength'] || codeAlpha2.errors?.['pattern']">2 uppercase letters</span>
+            </p>
+          </div>
+
+          <!-- Alpha3 -->
+          <div>
+            <app-label>Code Alpha3</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.codeAlpha3"
+              name="codeAlpha3"
+              #codeAlpha3="ngModel"
+              maxlength="3"
+              minlength="3"
+              pattern="[A-Z]{3}"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm uppercase focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              [class.border-red-500]="codeAlpha3.invalid && (codeAlpha3.dirty || codeAlpha3.touched)"
+            />
+            <p *ngIf="codeAlpha3.invalid && (codeAlpha3.dirty || codeAlpha3.touched)" class="mt-1 text-xs text-red-600 dark:text-red-400">
+              <span *ngIf="codeAlpha3.errors?.['minlength'] || codeAlpha3.errors?.['pattern']">3 uppercase letters</span>
+            </p>
+          </div>
+
+          <!-- Description -->
+          <div class="lg:col-span-2">
+            <app-label>Description</app-label>
+            <input
+              type="text"
+              [(ngModel)]="modalState.data!.description"
+              name="description"
+              class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="mt-5 rounded-xl border border-gray-200 p-4 dark:border-gray-800" *ngIf="modalState.data">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-semibold text-gray-900 dark:text-white">Active Status</p>
+              <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                {{ modalState.data!.recordStatus === 'O' ? 'Active' : 'Inactive' }}
+              </p>
+            </div>
+
+            <label class="relative inline-flex cursor-pointer items-center">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                [checked]="modalState.data!.recordStatus === 'O'"
+                (change)="modalState.data!.recordStatus = modalState.data!.recordStatus === 'O' ? 'C' : 'O'"
+              />
+              <div
+                class="h-6 w-11 rounded-full bg-gray-300 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-white after:transition-all
+                       peer-checked:bg-green-500 peer-checked:after:translate-x-full
+                       dark:bg-gray-700"
+              ></div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="mt-4 flex items-center justify-end gap-3">
+        <app-button type="button" size="sm" variant="outline" (btnClick)="onClose()">Cancel</app-button>
+        <app-button type="submit" size="sm" [disabled]="countryForm?.invalid || false">
+          {{ modalState.mode === 'create' ? 'Create' : 'Save' }}
+        </app-button>
+      </div>
+    </form>
+
+    <!-- View actions -->
+    <div *ngIf="modalState.mode === 'view'" class="mt-4 flex items-center justify-end gap-3">
+      <app-button type="button" size="sm" variant="outline" (btnClick)="onClose()">Close</app-button>
+      <app-button type="button" size="sm" (btnClick)="onEditFromView()">Edit</app-button>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,13 @@
+<button
+  (click)="onClick($event)"
+  [ngClass]="getButtonClass()"
+  [disabled]="disabled"
+  [title]="getTitle()"
+  [attr.aria-label]="getTitle()"
+  type="button"
+  class="inline-flex items-center justify-center transition-colors focus:outline-none cursor-pointer"
+  style="pointer-events: auto;"
+>
+  <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" [innerHTML]="getSafeIcon()">
+  </svg>
+</button>

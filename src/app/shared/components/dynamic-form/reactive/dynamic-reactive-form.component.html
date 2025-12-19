@@ -1,0 +1,177 @@
+<div class="p-6 bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800">
+  <h3 *ngIf="title" class="mb-6 text-xl font-semibold text-gray-800 dark:text-white">
+    {{ title }}
+  </h3>
+  
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div 
+      class="grid gap-6"
+      [ngClass]="{
+        'grid-cols-1': (config.columns || 2) === 1,
+        'grid-cols-1 md:grid-cols-2': (config.columns || 2) === 2,
+        'grid-cols-1 md:grid-cols-3': (config.columns || 2) === 3,
+        'grid-cols-1 md:grid-cols-4': (config.columns || 2) === 4
+      }"
+    >
+      <div 
+        *ngFor="let field of visibleFields; trackBy: trackByFieldName"
+        [ngClass]="'md:col-span-' + (field.colspan || 1)"
+      >
+        <app-label>{{ field.label }}</app-label>
+        
+        <ng-container [ngSwitch]="field.type">
+          <!-- Text, Email, Number -->
+          <input
+            *ngSwitchCase="'text'"
+            [formControlName]="field.name"
+            type="text"
+            [placeholder]="field.placeholder || ''"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          />
+          
+          <input
+            *ngSwitchCase="'email'"
+            [formControlName]="field.name"
+            type="email"
+            [placeholder]="field.placeholder || ''"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          />
+          
+          <input
+            *ngSwitchCase="'number'"
+            [formControlName]="field.name"
+            type="number"
+            [placeholder]="field.placeholder || ''"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          />
+
+          <!-- Date -->
+          <input
+            *ngSwitchCase="'date'"
+            [formControlName]="field.name"
+            type="date"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          />
+
+          <!-- Select -->
+          <select
+            *ngSwitchCase="'select'"
+            [formControlName]="field.name"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          >
+            <option [ngValue]="null">{{ field.placeholder || 'Select...' }}</option>
+            <option *ngFor="let option of field.options" [ngValue]="option.value">
+              {{ option.label }}
+            </option>
+          </select>
+
+          <!-- Textarea -->
+          <textarea
+            *ngSwitchCase="'textarea'"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder || ''"
+            rows="4"
+            class="w-full px-4 py-3 text-sm text-gray-700 bg-white border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300"
+            [ngClass]="{
+              'border-gray-300 dark:border-gray-700': !hasError(field.name),
+              'border-red-500 dark:border-red-500': hasError(field.name)
+            }"
+          ></textarea>
+
+          <!-- Checkbox -->
+          <label *ngSwitchCase="'checkbox'" class="flex items-center gap-2 cursor-pointer">
+            <input
+              [formControlName]="field.name"
+              type="checkbox"
+              class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+            />
+            <span class="text-sm text-gray-700 dark:text-gray-300">{{ field.placeholder }}</span>
+          </label>
+
+          <!-- Radio -->
+          <div *ngSwitchCase="'radio'" class="flex flex-col gap-2">
+            <label 
+              *ngFor="let option of field.options" 
+              class="flex items-center gap-2 cursor-pointer"
+            >
+              <input
+                [formControlName]="field.name"
+                type="radio"
+                [value]="option.value"
+                class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <span class="text-sm text-gray-700 dark:text-gray-300">{{ option.label }}</span>
+            </label>
+          </div>
+        </ng-container>
+
+        <!-- Validation errors -->
+        <div 
+          *ngIf="hasError(field.name)"
+          class="mt-1 text-sm text-red-600 dark:text-red-400"
+        >
+          {{ getErrorMessage(field.name) }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Form actions -->
+    <div class="flex gap-3 mt-6" [ngClass]="{'justify-end': !showCancelButton}">
+      <app-button
+        *ngIf="showCancelButton"
+        type="button"
+        variant="outline"
+        (btnClick)="onCancel()"
+      >
+        {{ cancelButtonText }}
+      </app-button>
+      <app-button
+        *ngIf="showResetButton"
+        type="button"
+        variant="outline"
+        (btnClick)="onReset()"
+        [disabled]="!form.dirty"
+      >
+        Reset
+      </app-button>
+      <app-button
+        type="submit"
+        [disabled]="form.invalid || isSubmitting"
+      >
+        {{ isSubmitting ? 'Saving...' : submitButtonText }}
+      </app-button>
+    </div>
+
+    <!-- Form Status (Debug) -->
+    <div *ngIf="showDebugInfo" class="mt-4 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg text-xs">
+      <div class="grid grid-cols-2 gap-2">
+        <div>Valid: {{ form.valid }}</div>
+        <div>Invalid: {{ form.invalid }}</div>
+        <div>Dirty: {{ form.dirty }}</div>
+        <div>Pristine: {{ form.pristine }}</div>
+        <div>Touched: {{ form.touched }}</div>
+        <div>Untouched: {{ form.untouched }}</div>
+      </div>
+    </div>
+  </form>
+</div>

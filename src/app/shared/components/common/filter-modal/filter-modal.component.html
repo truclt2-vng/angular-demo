@@ -1,0 +1,71 @@
+<app-modal
+  [isOpen]="isOpen"
+  (close)="onClose()"
+  className="max-w-[600px] m-4"
+>
+  <div class="relative w-full max-w-[600px] rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-6">
+    <!-- Modal Header -->
+    <div class="px-2 pr-14">
+      <h4 class="mb-1 text-lg font-semibold text-gray-800 dark:text-white/90">{{ title }}</h4>
+      <p class="mb-3 text-xs text-gray-500 dark:text-gray-400">
+        Apply filters to refine your search results
+      </p>
+    </div>
+
+    <!-- Filter Form -->
+    <form (ngSubmit)="onApply()" class="flex flex-col">
+      <div class="overflow-y-auto px-2 pb-3 max-h-[400px]">
+        <div class="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div *ngFor="let filter of filters" [class.col-span-2]="filter.type === 'text' && filters.length % 2 !== 0">
+            <app-label>{{ filter.label }}</app-label>
+            
+            <!-- Text Input -->
+            <input 
+              *ngIf="filter.type === 'text'"
+              type="text" 
+              [(ngModel)]="filterValues[filter.field]"
+              [name]="filter.field"
+              class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+              placeholder="Enter {{ filter.label.toLowerCase() }}"
+            />
+            
+            <!-- Select Input -->
+            <select
+              *ngIf="filter.type === 'select'"
+              [(ngModel)]="filterValues[filter.field]"
+              [name]="filter.field"
+              class="w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
+            >
+              <option [value]="''">All</option>
+              <option *ngFor="let option of filter.options" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+            
+            <!-- Date Input -->
+            <input
+              *ngIf="filter.type === 'date'"
+              type="date"
+              [(ngModel)]="filterValues[filter.field]"
+              [name]="filter.field"
+              class="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+            />
+          </div>
+        </div>
+      </div>
+      
+      <!-- Actions -->
+      <div class="flex items-center gap-3 px-2 mt-4 lg:justify-end">
+        <app-button type="button" size="sm" variant="outline" (btnClick)="onReset()">
+          Reset
+        </app-button>
+        <app-button type="button" size="sm" variant="outline" (btnClick)="onClose()">
+          Cancel
+        </app-button>
+        <app-button type="submit" size="sm">
+          Apply Filters
+        </app-button>
+      </div>
+    </form>
+  </div>
+</app-modal>
